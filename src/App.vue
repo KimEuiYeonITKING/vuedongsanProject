@@ -18,10 +18,22 @@
      !!주의
     props는 read-only임.
     수정하면 큰일남.
-  -->
-  
-  <MyModal :products="products" :pushData="pushData" :모달창상태="모달창상태"  @closeModal="모달창상태 = false;"/>
 
+    css로 애니메이션 주기
+    1. 시작전 class명
+    2. 애니메이션 끝난 후 class명
+    3. 그리고 원할 때 2번 class명 부착
+
+    :class 하면 속성 바인딩 클래스에 직접 들어감.
+    end : 모달창상태 (true일때만 들어감)
+
+    하지만 뷰에서는 transition으로 아주 편하게 애니메이션을 줄수 있음.
+  -->
+  <!-- <div class="start" :class="{end : 모달창상태}"> -->
+    <Transition name="hehe">
+      <MyModal :products="products" :pushData="pushData" :모달창상태="모달창상태"  @closeModal="모달창상태 = false;"/>
+    </Transition>
+  <!-- </div> -->
   <!-- HTML반복문 
     <태그 v-for="작명 in 몇회" :key="작명"> 키가 반드시 필요함.
     몇회에 자료형을 집어 넣으면 자료형 랭스 만큼 돈다.
@@ -64,7 +76,11 @@
    
   -->
   <myDiscount/>
- 
+  <button @click="priceSort">가격순정렬</button>
+  <button @click="priceReverseSort">가격역순정렬</button>
+  <button @click="price50Sort">50만원 이하 상품</button>
+  <button @click="priceKANADASort">가나다순정렬</button>
+  <button @click="sortBack">되돌리기</button>
   
   <!--컴포넌트화 하기-->
 
@@ -135,10 +151,11 @@ export default {
       스타일 : 'color :blue',
       prices : [60,70,80],
       products : onerooms,
+      productsOrigin : [...onerooms], // 별개의 사본 만드려면! 그냥 쓰면 값을 공유함,
       메뉴들 : ['Home', 'Shop', 'About'],
       신고수 : [0,0,0,0,0,0],
       모달창상태 : false, // false은 닫힘 true은 열림
-      pushData :0,
+      pushData : 0,
     }
   },
  
@@ -156,7 +173,30 @@ export default {
         this.pushData = i;
       }
       
-    }
+    },
+    priceSort(){
+      this.products.sort(function(a,b){
+        return a.price - b.price
+      })
+    },
+    priceReverseSort(){
+      this.products.sort(function(a,b){
+        return b.price - a.price;
+      })
+    },
+    price50Sort(){
+   
+        this.products = this.products.filter((a)=> a > 500000);
+         
+         
+     
+      
+     
+    },
+    sortBack(){
+      this.products = [...this.productsOrigin]; //Array끼리 값 공유
+
+    },
   },
   components: {
     myDiscount : myDiscount,
@@ -172,6 +212,37 @@ export default {
   2. 데이터에 따라 UI가 어떻게 보일지 작성
 -->
 <style>
+.hehe-enter-from{
+  transform: translateY(-1000px);
+  
+}
+.hehe-enter-active{
+  transition: all 1s;
+}
+.hehe-enter-to{
+  transform: translateY(0px);
+}
+
+.hehe-leave-from{
+  opacity: 1;
+  
+}
+.hehe-leave-active{
+  transition: all 1s;
+}
+.hehe-leave-to{
+  opacity: 0;
+}
+
+.start{
+  opacity: 0;
+  transition: all 1s;
+}
+.end{
+  opacity: 1;
+}
+
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
