@@ -141,6 +141,7 @@ export default {
       pushData :0,
     }
   },
+ 
   // 함수는 데이터 뒤에 methods 써서 함수공간 만드셈 글고 함수(){} 이렇게 하면됨
   methods:{
     increase(i){

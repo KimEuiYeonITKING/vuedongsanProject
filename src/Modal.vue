@@ -32,7 +32,7 @@
       <!-- <input @input="month =$event.target.value">
         v-model.number 이러면 타입지정도 가능함.
     -->
-      <input v-model.number="month">
+      <input v-model="month">
       <p>{{ month }}개월 선택함 : {{products[pushData].price * month}}원</p>
     </div>
     <button @click="$emit('closeModal')">닫기</button>
@@ -48,6 +48,29 @@ export default {
             month : 1,
         }
     },
+     // 감시 !
+  watch:{
+    //데이터 이름과 동일하게 하면 그 데이터를 감시함.
+      month(input){
+        // isNaN = Not a Number >> isNaN(input)
+        if(isNaN(input)){
+            this.month =1;
+            alert('숫자만 입력해줘요!')
+        }else{
+            if(input > 13 ) {
+                alert('13이상 입력 금지')
+                this.month = 1;
+            }
+        }
+   
+      
+      
+     
+      
+        
+      
+    },
+  },
     props :{
         // props 데이터 보낸 이름 : 자료형
         products : Array,
